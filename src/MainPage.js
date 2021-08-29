@@ -13,8 +13,19 @@ import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/theme-github';
 import {useState} from 'react';
 
+const recursiveRemoveKey = (object, deleteKey) => {
+  delete object[deleteKey];
+  Object.values(object).forEach((val) => {
+    if (typeof val !== 'object') return;
+
+    recursiveRemoveKey(val, deleteKey);
+  });
+};
+
 const MainPage = () => {
+  // this is also pure string, no need to convert to JSON here
   const [aceText, setAceTextState] = useState('{}');
+  // its a string, need to convert to JSON before sending to <ReactJson />
   const [jsonViewText, setJsonViewTextState] = useState('{}');
   const onEdit = true;
   const onAdd = true;
@@ -28,6 +39,17 @@ const MainPage = () => {
 
   const handleCopyLeft = () => {
     setAceTextState(jsonViewText);
+  };
+
+  const handleNestedDelete = () => {
+    let nkeys = document.getElementById('idNestedKeys').value;
+    nkeys = nkeys.split(/,|" "+/);
+    let jsonObj = JSON.parse(jsonViewText);
+    nkeys.forEach((key) => {
+      recursiveRemoveKey(jsonObj, JSON.parse(key));
+      console.log('object after deleting ', key, ':- ', jsonObj);
+    });
+    setJsonViewTextState(JSON.stringify(jsonObj));
   };
 
   return (
@@ -119,10 +141,10 @@ const MainPage = () => {
           <InputGroup className="mb-3">
             <FormControl
               placeholder="Enter keys of nodes to be deleted seperated by ,"
-              aria-label="Recipient's username"
-              aria-describedby="basic-addon2"
+              aria-label="Enter keys of nodes to be deleted seperated by ,"
+              id="idNestedKeys"
             />
-            <Button variant="primary" id="button-addon2">
+            <Button variant="primary" onClick={handleNestedDelete}>
               Submit
             </Button>
           </InputGroup>
