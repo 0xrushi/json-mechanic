@@ -68,7 +68,10 @@ const MainPage = () => {
           />
         </Col>
         <Col id="middle-button-col" md={2}>
-          <Button className="copy-right" onClick={handleCopyRight}>
+          <Button
+            className="copy-right btn-secondary"
+            onClick={handleCopyRight}
+          >
             Copy{' '}
             <svg
               aria-hidden="true"
@@ -86,7 +89,7 @@ const MainPage = () => {
               ></path>
             </svg>
           </Button>
-          <Button className="copy-left" onClick={handleCopyLeft}>
+          <Button className="copy-left btn-secondary" onClick={handleCopyLeft}>
             <svg
               aria-hidden="true"
               focusable="false"
@@ -105,7 +108,7 @@ const MainPage = () => {
             Copy
           </Button>
         </Col>
-        <Col md={5}>
+        <Col md={5} id="json-view-col">
           <ReactJson
             theme="bright:inverted"
             src={JSON.parse(jsonViewText)}
@@ -144,7 +147,7 @@ const MainPage = () => {
               aria-label="Enter keys of nodes to be deleted seperated by ,"
               id="idNestedKeys"
             />
-            <Button variant="primary" onClick={handleNestedDelete}>
+            <Button variant="danger" onClick={handleNestedDelete}>
               Submit
             </Button>
           </InputGroup>
